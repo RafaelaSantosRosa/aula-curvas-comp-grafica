@@ -58,13 +58,37 @@ var raio = 1;
 // }
 
 //curva de Bézier
-var curva = new THREE.CubicBezierCurve3(
+// var curva = new THREE.CubicBezierCurve3(
+//     new THREE.Vector3(-1, 0, 0),
+//     new THREE.Vector3(-0.5, 1.5, 0),
+//     new THREE.Vector3(2, 1.5, 0),
+//     new THREE.Vector3(1, 0, 0),
+// );
+// pontos = curva.getPoints( 30 ); //resolução
+
+//curva de Spline
+var curva = new THREE.SplineCurve([
     new THREE.Vector3(-1, 0, 0),
-    new THREE.Vector3(-0.5, 1.5, 0),
-    new THREE.Vector3(2, 1.5, 0),
+    new THREE.Vector3(-0.5, 0.5, 0),
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(0.5, -0.5, 0),
     new THREE.Vector3(1, 0, 0),
-);
-pontos = curva.getPoints( 30 ); //resolução
+    new THREE.Vector3(1.5, 0.5, 0),
+    new THREE.Vector3(2, 0, 0)
+]);
+pontos = curva.getPoints( 50 );
+
+//desenhando pontos de referência
+var materialPonto = new THREE.PointsMaterial({ size: 10, sizeAttenuation: false});
+
+for (let p of curva.points){
+    var coord = [];
+    coord.push(new THREE.Vector3( p.x, p.y, p.z));
+
+    var geometriaPonto = new THREE.BufferGeometry().setFromPoints( coord );
+    var ponto = new THREE.Points(geometriaPonto, materialPonto);
+    cena.add(ponto);
+}
 
 var geometriaLinha = new THREE.BufferGeometry().setFromPoints( pontos );
 var linha = new THREE.Line(geometriaLinha, materialLinha);
